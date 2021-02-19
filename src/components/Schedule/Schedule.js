@@ -4,9 +4,6 @@ class Schedule extends HTMLElement {
   constructor() {
     super();
 
-    this.start = this.getAttribute('start');
-    this.end = this.getAttribute('end');
-
     this.timeout;
 
     const date = new Date();
@@ -16,7 +13,7 @@ class Schedule extends HTMLElement {
   getData = async () => {
     let scheduleUrl = '/api/v1/schedule';
     if (this.start) {  
-      scheduleUrl += `?startDate=${this.start}&endDate=${this.end || this.today}`
+      scheduleUrl += `?startDate=${this.start}&endDate=${this.end || this.today}`;
     }
 
     const json = await DataService.fetch(scheduleUrl);
@@ -24,8 +21,21 @@ class Schedule extends HTMLElement {
   }
 
   render = json => {
-    // nothing yet
-    console.log(json);
+    if (json.totalItems > 0) {
+      const { dates } = json;
+
+      dates.forEach(date => {
+        const { games } = date;
+
+        games.forEach(game => {
+          const element = document.createElement('nhl-game');
+          element.setAttribute('data-link', game.link);
+          this.appendChild(element);
+        });
+      });
+    } else {
+      this.innerHTML = 'No games today';
+    }
   }
 
   /**
@@ -41,6 +51,9 @@ class Schedule extends HTMLElement {
   }
 
   connectedCallback() {
+    this.start = this.getAttribute('start');
+    this.end = this.getAttribute('end');
+
     this.getData();
   }
 
