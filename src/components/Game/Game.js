@@ -19,21 +19,28 @@ class Game extends HTMLElement {
     const homeStats = boxscoreTeams.home.teamStats.teamSkaterStats;
     
     const html = `
-        <header class="game-state">
-          <span class="abstract-state">${gameData?.status?.abstractGameState}</span>
-          <span class="detailed-stte">${gameData?.status?.detailedState}</span>
-        </header>
-        <section class="game-teams">
-          <div data-id="${awayTeam.id}" class="team-away">
-            <div class="team-name team-${awayTeam.id}">${awayTeam.name}</div>
-            <div class="team-score">${awayStats.goals}</div>
-          </div>
-          <div class="game-divider">@</div>
-          <div data-id="${homeTeam.id}" class="team-home">
-            <div class="team-name team-${homeTeam.id}">${homeTeam.name}</div>
-            <div class="team-score">${homeStats.goals}</div>
-          </div>
-        </section>
+      <nhl-game-header
+        abstract-state="${gameData?.status?.abstractGameState}"
+        detailed-state="${gameData?.status?.detailedState}"
+      ></nhl-game-header>
+      
+      <section class="game-teams">
+        <nhl-game-team
+          class="team-away"
+          data-id="${awayTeam.id}"
+          team-name="${awayTeam.name}"
+          goals="${awayStats.goals}"
+        ></nhl-game-team>
+
+        <div class="game-divider">@</div>
+        
+        <nhl-game-team
+          class="team-home"
+          data-id="${homeTeam.id}"
+          team-name="${homeTeam.name}"
+          goals="${homeStats.goals}"
+        ></nhl-game-team>
+      </section>
     `;
 
     const gameWrapper = document.createElement('section');

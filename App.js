@@ -1,10 +1,10 @@
-import { game } from './src/components/Game/Game.js';
-import { schedule } from './src/components/Schedule/Schedule.js';
+import * as webComponents from './src/components/index.js';
 
 const App = async () => {
-  console.log('Initializing custom elements');
-  schedule();
-  game();
+  Object.keys(webComponents).forEach(name => {
+    console.log(`initializing ${name} component`);
+    webComponents[name]();
+  });
 };
 
 document.addEventListener('DOMContentLoaded', App);
